@@ -9,6 +9,8 @@ const SendMessage = () => {
   const sendMessage = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
+      // space string Ban
+      if (/[\s]/g.test(message) || !message) return;
       const { uid, photoURL } = auth?.currentUser as User;
 
       await db.collection("messages").add({
@@ -22,7 +24,7 @@ const SendMessage = () => {
   );
 
   return (
-    <div>
+    <div className="message-form-container">
       <form onSubmit={sendMessage}>
         <input
           value={message}

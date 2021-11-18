@@ -3,12 +3,18 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
 import { auth } from "../setting/firebase";
+import { RouterComponent } from "../assets/types";
 
-const SignIn = () => {
+interface SignInProps extends RouterComponent {
+  navigate: (URL: string) => void;
+}
+
+const SignIn: React.FC<SignInProps> = ({ navigate }) => {
   const singInWithGoogle = useCallback(() => {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider);
-  }, []);
+    navigate("/chatRoom");
+  }, [navigate]);
 
   return (
     <div>
