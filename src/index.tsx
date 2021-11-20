@@ -6,13 +6,16 @@ import { ThemeProvider } from "styled-components";
 import { theme } from "./assets/style/theme";
 import GlobalStyle from "./assets/style/global-style";
 import Router from "./router";
+import UserContextProvider from "./context/Context";
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Router>
-        <App />
+        <UserContextProvider>
+          <App />
+        </UserContextProvider>
       </Router>
     </ThemeProvider>
   </React.StrictMode>,
