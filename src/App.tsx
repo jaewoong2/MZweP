@@ -24,7 +24,10 @@ function App() {
   return (
     <Main>
       <Routes>
-        <Route path="" element={<Init />} />
+        <Route path="/init" element={<Init />} />
+        <Route path="/" element={<Init />} />
+        <Route path="/setting" element={<Init />} />
+        <Route path="/mission" element={<Init />} />
       </Routes>
     </Main>
   );

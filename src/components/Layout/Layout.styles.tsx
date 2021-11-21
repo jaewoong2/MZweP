@@ -72,6 +72,7 @@ const Container = styled.div`
   min-height: 700px;
   padding: 10px 20px 0 20px;
   font-family: "Noto Sans KR", sans-serif;
+  position: relative;
 `;
 
 const Footer = styled.footer`
