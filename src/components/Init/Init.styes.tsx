@@ -200,6 +200,7 @@ export const Information = styled.div`
     font-size: 15px;
     line-height: 1.7em;
     /* min-height: 270px; */
+    text-align: right;
 
     span {
       cursor: pointer;
@@ -214,6 +215,28 @@ export const Information = styled.div`
 
     .selected {
       background-color: #8b5dd9b3;
+    }
+  }
+  .line-click {
+    width: 95%;
+    display: flex;
+    font-weight: 600;
+    font-size: 13px;
+    font-family: "Noto Sans KR", sans-serif;
+    justify-content: flex-end;
+    align-items: center;
+    text-shadow: 1px 1px 2px #7a7a7ac7;
+    position: relative;
+
+    &::after {
+      left: 10px;
+      top: 50%;
+      position: absolute;
+      content: "";
+      width: 88%;
+      border-radius: 16px;
+      height: 2px;
+      background-color: #9796967d;
     }
   }
 `;

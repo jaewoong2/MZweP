@@ -7,12 +7,19 @@ export interface RouterComponent extends RouteProps, JSX.Element {
 }
 
 export interface UserContextType {
-    userName: string;
-    mbti: MBTI_NAME;
-    currentPage: "HOME" | "MISSION" | "SETTING";
-    setMbti: (value: MBTI_NAME) => void;
-    setCurrentPage: (value: "HOME" | "MISSION" | "SETTING") => void;
-    setUserName: (value: string) => void;
+    user: {
+        userName: string;
+        mbti: MBTI_NAME;
+        currentPage: "HOME" | "MISSION" | "SETTING";
+        isLoggedin: boolean;
+        isSetted: boolean;
+        setMbti: (value: MBTI_NAME) => void;
+        setCurrentPage: (value: "HOME" | "MISSION" | "SETTING") => void;
+        setUserName: (value: string) => void;
+        setIsLoggedin: (login: boolean) => void;
+        setIsSetted: (setted: boolean) => void;
+    },
+    setUser: (user: any) => void;
 }
 
 export type MBTI_NAME = "INTJ" | "INTP" | "ENTJ" | "ENTP" | "INFJ" | "INFP" | "ENFJ" | "ENFP" | "ISTJ" | "ISFJ" | "ESTJ" | "ESFJ" | "ISTP" | "ISFP" | "ESTP" | "ESFP"

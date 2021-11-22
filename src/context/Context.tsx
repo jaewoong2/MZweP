@@ -1,47 +1,50 @@
 import { createContext, useCallback, useState } from "react";
 import { MBTI_NAME, UserContextType } from "../assets/types";
+import useContextState from "../hooks/useContextState";
 
 const initialUserState: UserContextType = {
-  mbti: "ESTP",
-  currentPage: "HOME",
-  userName: "",
-  setMbti: (value: MBTI_NAME) => {},
-  setCurrentPage: (value: "HOME" | "MISSION" | "SETTING") => {},
-  setUserName: (value: string) => {},
+  user: {
+    mbti: "ESTP",
+    currentPage: "HOME",
+    userName: "",
+    isLoggedin: false,
+    isSetted: false,
+    setMbti: (value: MBTI_NAME) => {},
+    setCurrentPage: (value: "HOME" | "MISSION" | "SETTING") => {},
+    setUserName: (value: string) => {},
+    setIsLoggedin: (login: boolean) => {},
+    setIsSetted: (login: boolean) => {},
+  },
+  setUser: () => {},
 };
 
 export const UserContext = createContext(initialUserState);
 
 const UserContextProvider: React.FC = ({ children }) => {
-  const [mbti, setMbti_] = useState<UserContextType["mbti"]>("ESTP");
-  const [currentPage, setCurrentPage_] =
-    useState<UserContextType["currentPage"]>("HOME");
-  const [userName, setUserName_] = useState("");
-
-  const setMbti = useCallback((value: UserContextType["mbti"]) => {
-    setMbti_(value);
-  }, []);
-
-  const setCurrentPage = useCallback(
-    (value: UserContextType["currentPage"]) => {
-      setCurrentPage_(value);
-    },
-    []
-  );
-
-  const setUserName = useCallback((value: string) => {
-    setUserName_(value);
-  }, []);
+  const [mbti, setMbti] =
+    useContextState<UserContextType["user"]["mbti"]>("ESTP");
+  const [currentPage, setCurrentPage] =
+    useContextState<UserContextType["user"]["currentPage"]>("HOME");
+  const [userName, setUserName] = useContextState<string>("");
+  const [isLoggedin, setIsLoggedin] = useContextState<boolean>(true);
+  const [isSetted, setIsSetted] = useContextState<boolean>(false);
 
   return (
     <UserContext.Provider
       value={{
-        mbti,
-        currentPage,
-        userName,
-        setMbti,
-        setCurrentPage,
-        setUserName,
+        user: {
+          mbti,
+          currentPage,
+          userName,
+          isLoggedin,
+          setMbti,
+          setCurrentPage,
+          setUserName,
+          setIsLoggedin,
+          isSetted,
+          setIsSetted,
+        },
+        setUser: () => {},
       }}
     >
       {children}

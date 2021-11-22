@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import ChatRooms from "./components/ChatRoom";
 import Layout from "./components/Layout";
 import Init from "./components/Init";
+import Congratulate from "./components/Congratulate";
 
 const Main = styled.main`
   width: 100%;
@@ -21,13 +22,24 @@ const Main = styled.main`
 `;
 
 function App() {
+  const navigator = useNavigate();
+
+  const appNavigator = useCallback(
+    (url: string) => navigator(url),
+    [navigator]
+  );
+
   return (
     <Main>
       <Routes>
-        <Route path="/init" element={<Init />} />
-        <Route path="/" element={<Init />} />
-        <Route path="/setting" element={<Init />} />
-        <Route path="/mission" element={<Init />} />
+        <Route path="/init" element={<Init navigator={appNavigator} />} />
+        <Route path="/" element={<Init navigator={appNavigator} />} />
+        <Route
+          path="/congratulate"
+          element={<Congratulate navigator={appNavigator} />}
+        />
+        <Route path="/setting" element={<Init navigator={appNavigator} />} />
+        <Route path="/mission" element={<Init navigator={appNavigator} />} />
       </Routes>
     </Main>
   );

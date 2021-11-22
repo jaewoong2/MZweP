@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { MBTI_INFO } from "../../assets/constant";
 import { MBTI_NAME } from "../../assets/types";
 import { UserContext } from "../../context/Context";
@@ -12,8 +12,13 @@ const mbtiSetting = [
   ["P", "J"],
 ];
 
-const Init = () => {
-  const { mbti, setMbti } = useContext(UserContext);
+interface InitProps {
+  navigator: (url: string) => void;
+}
+
+const Init: React.FC<InitProps> = ({ navigator }) => {
+  const { user } = useContext(UserContext);
+  const { mbti, setMbti, isLoggedin, setIsSetted } = user;
   const [hashtag, setHashtag] = useState(MBTI_INFO[mbti].infomation[0]);
 
   const onClickHashTag = useCallback((value: string) => {
@@ -39,11 +44,18 @@ const Init = () => {
     [mbti, setMbti]
   );
 
+  const onClickSetting = useCallback(() => {
+    if (mbti && hashtag && isLoggedin) {
+      setIsSetted(true);
+      navigator("congratulate");
+    }
+  }, [navigator, setIsSetted, isLoggedin, mbti, hashtag]);
+
   return (
     <Layout>
       <InitStyled.Wrapper>
         <div className="suggest">
-          되고 싶은 <span>MBTI</span>를 <br /> 클릭 해주세요.{" "}
+          되고 싶은 <span>MBTI</span>를 <br /> 골라 주세요.{" "}
         </div>
         <InitStyled.Container>
           {mbti.split("").map((value, index) => (
@@ -64,6 +76,7 @@ const Init = () => {
               </span>
             ))}
           </div>
+          <div className="line-click">Pick !</div>
         </InitStyled.Information>
         <div className="nickname-form">
           <div className="nickname-hash-tag">
@@ -72,11 +85,13 @@ const Init = () => {
               {hashtag}
             </div>
           </div>
-          <div className="nickname-input-wrapper">
+          {/* <div className="nickname-input-wrapper">
             <span className="prefix">Google 닉네임님</span>
-          </div>
+          </div> */}
         </div>
-        <div className="set">설정</div>
+        <div onClick={onClickSetting} className="set">
+          설정
+        </div>
       </InitStyled.Wrapper>
     </Layout>
   );
