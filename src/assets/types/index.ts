@@ -10,9 +10,11 @@ export interface UserContextType {
     user: {
         userName: string;
         mbti: MBTI_NAME;
+        hashtag: string;
         currentPage: "HOME" | "MISSION" | "SETTING";
         isLoggedin: boolean;
         isSetted: boolean;
+        setHashtag: (value: string) => void;
         setMbti: (value: MBTI_NAME) => void;
         setCurrentPage: (value: "HOME" | "MISSION" | "SETTING") => void;
         setUserName: (value: string) => void;

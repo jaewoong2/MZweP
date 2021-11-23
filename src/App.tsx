@@ -9,7 +9,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import ChatRooms from "./components/ChatRoom";
 import Layout from "./components/Layout";
 import Init from "./components/Init";
-import Congratulate from "./components/Congratulate";
+import Intro from "./components/Intro";
 
 const Main = styled.main`
   width: 100%;
@@ -33,11 +33,7 @@ function App() {
     <Main>
       <Routes>
         <Route path="/init" element={<Init navigator={appNavigator} />} />
-        <Route path="/" element={<Init navigator={appNavigator} />} />
-        <Route
-          path="/congratulate"
-          element={<Congratulate navigator={appNavigator} />}
-        />
+        <Route path="/" element={<Intro navigator={appNavigator} />} />
         <Route path="/setting" element={<Init navigator={appNavigator} />} />
         <Route path="/mission" element={<Init navigator={appNavigator} />} />
       </Routes>

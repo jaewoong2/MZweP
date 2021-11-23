@@ -4,11 +4,13 @@ import useContextState from "../hooks/useContextState";
 
 const initialUserState: UserContextType = {
   user: {
+    hashtag: "",
     mbti: "ESTP",
     currentPage: "HOME",
     userName: "",
     isLoggedin: false,
     isSetted: false,
+    setHashtag: (value: string) => {},
     setMbti: (value: MBTI_NAME) => {},
     setCurrentPage: (value: "HOME" | "MISSION" | "SETTING") => {},
     setUserName: (value: string) => {},
@@ -28,11 +30,13 @@ const UserContextProvider: React.FC = ({ children }) => {
   const [userName, setUserName] = useContextState<string>("");
   const [isLoggedin, setIsLoggedin] = useContextState<boolean>(true);
   const [isSetted, setIsSetted] = useContextState<boolean>(false);
+  const [hashtag, setHashtag] = useContextState<string>("");
 
   return (
     <UserContext.Provider
       value={{
         user: {
+          hashtag,
           mbti,
           currentPage,
           userName,
@@ -41,6 +45,7 @@ const UserContextProvider: React.FC = ({ children }) => {
           setCurrentPage,
           setUserName,
           setIsLoggedin,
+          setHashtag,
           isSetted,
           setIsSetted,
         },

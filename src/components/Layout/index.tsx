@@ -3,6 +3,7 @@ import * as Styled from "./Layout.styles";
 import { GrHomeOption } from "react-icons/gr";
 import { RiMenu3Fill } from "react-icons/ri";
 import { AiOutlineStar, AiFillSetting } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 const Layout: React.FC = ({ children }) => {
   return (
@@ -19,16 +20,22 @@ const Layout: React.FC = ({ children }) => {
       <Styled.Nav>
         <Styled.Lists>
           <li>
-            <AiOutlineStar className="icon"></AiOutlineStar>
-            <span>미션</span>
+            <Link className="link" to={"/mission"}>
+              <AiOutlineStar className="icon"></AiOutlineStar>
+              <span>미션</span>
+            </Link>
           </li>
           <li>
-            <GrHomeOption className="icon"></GrHomeOption>
-            <span>홈</span>
+            <Link className="link" to={"/home"}>
+              <GrHomeOption className="icon"></GrHomeOption>
+              <span>홈</span>
+            </Link>
           </li>
           <li>
-            <AiFillSetting className="icon"></AiFillSetting>
-            <span>설정</span>
+            <Link className="link" to={"/setting"}>
+              <AiFillSetting className="icon"></AiFillSetting>
+              <span>설정</span>
+            </Link>
           </li>
         </Styled.Lists>
       </Styled.Nav>

@@ -9,12 +9,20 @@ const Main = styled.main`
   border-radius: 8px;
   box-shadow: 1px 1px 10px #525252ae;
   background-color: #fff;
+  min-height: 100%;
   max-width: 435px;
   max-height: 960px;
 
   * {
     /* font-family: "Architects Daughter", cursive; */
     /* font-family: "Dancing Script", cursive; */
+  }
+
+  @media screen and (max-width: 400px) {
+    width: 100%;
+    hegith: 100%;
+    min-height: 100%;
+    max-height: none;
   }
 `;
 
@@ -66,10 +74,14 @@ const Header = styled.header`
 
 const Nav = styled.nav`
   width: 100%;
+  left: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 `;
 
 const Container = styled.div`
-  min-height: 700px;
+  min-height: 100%;
   padding: 10px 20px 0 20px;
   font-family: "Noto Sans KR", sans-serif;
   position: relative;
@@ -121,6 +133,20 @@ const Lists = styled.ul`
       }
     }
     transition: all 0.25s;
+  }
+
+  .link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
   }
 `;
 

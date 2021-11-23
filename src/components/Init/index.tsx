@@ -18,7 +18,7 @@ interface InitProps {
 
 const Init: React.FC<InitProps> = ({ navigator }) => {
   const { user } = useContext(UserContext);
-  const { mbti, setMbti, isLoggedin, setIsSetted } = user;
+  const { mbti, setMbti, isLoggedin, setIsSetted, setHashtag: setHash } = user;
   const [hashtag, setHashtag] = useState(MBTI_INFO[mbti].infomation[0]);
 
   const onClickHashTag = useCallback((value: string) => {
@@ -47,9 +47,10 @@ const Init: React.FC<InitProps> = ({ navigator }) => {
   const onClickSetting = useCallback(() => {
     if (mbti && hashtag && isLoggedin) {
       setIsSetted(true);
-      navigator("congratulate");
+      setHash(hashtag);
+      navigator("home");
     }
-  }, [navigator, setIsSetted, isLoggedin, mbti, hashtag]);
+  }, [navigator, setIsSetted, isLoggedin, mbti, hashtag, setHash]);
 
   return (
     <Layout>
