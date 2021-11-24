@@ -5,7 +5,7 @@ import "firebase/compat/auth";
 import { auth } from "../setting/firebase";
 import { RouterComponent } from "../assets/types";
 
-interface SignInProps extends RouterComponent {
+interface SignInProps {
   navigate: (URL: string) => void;
 }
 

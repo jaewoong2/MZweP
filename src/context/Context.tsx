@@ -4,6 +4,9 @@ import useContextState from "../hooks/useContextState";
 
 const initialUserState: UserContextType = {
   user: {
+    displayName: "",
+    uid: "",
+    photoURL: "",
     hashtag: "",
     mbti: "ESTP",
     currentPage: "HOME",

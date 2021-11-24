@@ -15,7 +15,6 @@ export const Container = styled.div`
   height: 100%;
   min-height: inherit;
   display: flex;
-  opacity: 0;
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -27,13 +26,12 @@ export const Container = styled.div`
   font-size: 20px;
   padding-bottom: 100px;
   animation: ${opacityAnimation} 2s linear;
-  opacity: 1;
 `;
 
 export const Headers = styled.header`
-  display: flex;
+  display: ${(props) => (props.className !== "hidden" ? "none" : "flex")};
+  flex-direction: column;
   align-items: center;
-  font-size: 50px;
   font-style: normal;
   text-shadow: 1px 1px 5px #5e5d5dec;
 
@@ -49,6 +47,8 @@ export const Headers = styled.header`
   transition: all 0.25s;
 
   .spans {
+    font-size: 50px;
+
     color: ${(props) => props.theme.color.main};
 
     .B {
@@ -64,5 +64,26 @@ export const Headers = styled.header`
     }
     font-weight: bolder;
     font-family: "Lobster", cursive;
+  }
+`;
+
+export const Login = styled.div`
+  width: 100%;
+  height: 50px;
+  display: ${(props) => (props.className === "hidden" ? "none" : "flex")};
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 2px solid black;
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  color: #272727;
+  text-shadow: none;
+  font-size: 20px;
+  .icon {
+    font-size: 36px;
+    margin-right: 15px;
   }
 `;

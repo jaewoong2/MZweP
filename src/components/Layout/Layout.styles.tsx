@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-const Main = styled.main`
+const Main = styled.div`
   width: 100%;
-  /* height: 100%; */
+  height: 100%;
   position: relative;
 
   /* 조정 */
@@ -20,7 +20,7 @@ const Main = styled.main`
 
   @media screen and (max-width: 400px) {
     width: 100%;
-    hegith: 100%;
+    height: 100%;
     min-height: 100%;
     max-height: none;
   }
@@ -82,6 +82,7 @@ const Nav = styled.nav`
 
 const Container = styled.div`
   min-height: 100%;
+  height: 100%;
   padding: 10px 20px 0 20px;
   font-family: "Noto Sans KR", sans-serif;
   position: relative;

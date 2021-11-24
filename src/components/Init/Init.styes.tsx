@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   width: 100%;
+  min-height: 100%;
   height: 100%;
 
   .nickname-form {
@@ -88,20 +89,56 @@ export const Wrapper = styled.div`
     font-weight: 700;
     font-family: "Noto Sans KR", sans-serif;
     align-items: center;
+
     position: absolute;
     left: 5%;
-    bottom: 50px;
+
+    // 밑에는 60px
+    bottom: 150px;
+  }
+
+  .tooltip {
+    margin-top: 20px;
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #8f8f8f;
+
+    .icon {
+      color: ${({ theme }) => theme.color.pink};
+      margin-right: 10px;
+    }
+  }
+
+  .tooltip2 {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #8f8f8f;
+
+    .icon {
+      color: ${({ theme }) => theme.color.pink};
+      margin-right: 10px;
+    }
   }
 `;
 
 export const Container = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   font-family: "Shippori Antique", sans-serif;
   cursor: pointer;
   margin-top: 50px;
+
   .mbti {
     border-radius: 50%;
     width: 78px;

@@ -1,8 +1,12 @@
 import React, { useCallback, useContext, useState } from "react";
+import { BsExclamationCircle } from "react-icons/bs";
 import { MBTI_INFO } from "../../assets/constant";
 import { MBTI_NAME } from "../../assets/types";
 import { UserContext } from "../../context/Context";
 import Layout from "../Layout";
+import { auth, db } from "../../setting/firebase";
+import firebase from "firebase/compat/app";
+import { User } from "firebase/auth";
 import * as InitStyled from "./Init.styes";
 
 const mbtiSetting = [
@@ -17,13 +21,23 @@ interface InitProps {
 }
 
 const Init: React.FC<InitProps> = ({ navigator }) => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { mbti, setMbti, isLoggedin, setIsSetted, setHashtag: setHash } = user;
   const [hashtag, setHashtag] = useState(MBTI_INFO[mbti].infomation[0]);
 
   const onClickHashTag = useCallback((value: string) => {
     setHashtag(value);
   }, []);
+
+  const signIn = useCallback(async () => {
+    const { uid } = auth?.currentUser as User;
+
+    await db.collection(`users`).doc(uid).collection("information").add({
+      mbti,
+      hashtag,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+  }, [mbti, hashtag]);
 
   const onClickArrow = useCallback(
     (index: number) => {
@@ -49,8 +63,9 @@ const Init: React.FC<InitProps> = ({ navigator }) => {
       setIsSetted(true);
       setHash(hashtag);
       navigator("home");
+      signIn();
     }
-  }, [navigator, setIsSetted, isLoggedin, mbti, hashtag, setHash]);
+  }, [navigator, setIsSetted, isLoggedin, mbti, hashtag, setHash, signIn]);
 
   return (
     <Layout>
@@ -89,6 +104,14 @@ const Init: React.FC<InitProps> = ({ navigator }) => {
           {/* <div className="nickname-input-wrapper">
             <span className="prefix">Google 닉네임님</span>
           </div> */}
+        </div>
+        <div className="tooltip">
+          <BsExclamationCircle className="icon" />
+          <span>미션을 수행하고 Point를 받아 가요.</span>
+        </div>
+        <div className="tooltip2">
+          <BsExclamationCircle className="icon" />
+          <span>Point는 상품으로 바꿀 수 있어요.</span>
         </div>
         <div onClick={onClickSetting} className="set">
           설정
