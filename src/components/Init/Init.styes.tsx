@@ -5,6 +5,18 @@ export const Wrapper = styled.div`
   min-height: 100%;
   height: 100%;
 
+  .image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .photoURL {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+  }
+
   .nickname-form {
     display: flex;
     width: 100%;
@@ -137,7 +149,7 @@ export const Container = styled.div`
   justify-content: center;
   font-family: "Shippori Antique", sans-serif;
   cursor: pointer;
-  margin-top: 50px;
+  margin-top: 20px;
 
   .mbti {
     border-radius: 50%;
@@ -238,6 +250,7 @@ export const Information = styled.div`
     line-height: 1.7em;
     /* min-height: 270px; */
     text-align: right;
+    width: 100%;
 
     span {
       cursor: pointer;

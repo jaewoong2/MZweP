@@ -10,6 +10,7 @@ import ChatRooms from "./components/ChatRoom";
 import Layout from "./components/Layout";
 import Init from "./components/Init";
 import Intro from "./components/Intro";
+import Home from "./components/Home";
 
 const Main = styled.main`
   width: 100%;
@@ -34,6 +35,7 @@ function App() {
       <Routes>
         <Route path="/init" element={<Init navigator={appNavigator} />} />
         <Route path="/" element={<Intro navigator={appNavigator} />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/setting" element={<Init navigator={appNavigator} />} />
         <Route path="/mission" element={<Init navigator={appNavigator} />} />
       </Routes>

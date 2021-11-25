@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { BsExclamationCircle } from "react-icons/bs";
 import { MBTI_INFO } from "../../assets/constant";
-import { MBTI_NAME } from "../../assets/types";
+import { MBTI_NAME, UserContextType } from "../../assets/types";
 import { UserContext } from "../../context/Context";
 import Layout from "../Layout";
 import { auth, db } from "../../setting/firebase";
@@ -22,12 +22,44 @@ interface InitProps {
 
 const Init: React.FC<InitProps> = ({ navigator }) => {
   const { user, setUser } = useContext(UserContext);
-  const { mbti, setMbti, isLoggedin, setIsSetted, setHashtag: setHash } = user;
-  const [hashtag, setHashtag] = useState(MBTI_INFO[mbti].infomation[0]);
+  const { mbti, setMbti, hashtag, setHashtag } = user;
 
-  const onClickHashTag = useCallback((value: string) => {
-    setHashtag(value);
-  }, []);
+  useEffect(() => {
+    if (auth.currentUser) {
+      const { uid, photoURL, displayName } = auth?.currentUser as User;
+      db.collection(`users`)
+        .doc(uid)
+        .collection("information")
+        .onSnapshot((snapshot) => {
+          const data = snapshot?.docs[0]?.data();
+          if (data) {
+            const { mbti, hashtag } = data as UserContextType["user"];
+            setUser({
+              mbti,
+              hashtag,
+              uid,
+              displayName,
+              photoURL,
+            });
+          } else {
+            setUser({
+              photoURL,
+              displayName,
+              uid,
+            });
+          }
+        });
+    } else {
+      navigator("/");
+    }
+  }, [navigator, setUser, auth]);
+
+  const onClickHashTag = useCallback(
+    (value: string) => {
+      setHashtag(value);
+    },
+    [setHashtag]
+  );
 
   const signIn = useCallback(async () => {
     const { uid } = auth?.currentUser as User;
@@ -55,17 +87,16 @@ const Init: React.FC<InitProps> = ({ navigator }) => {
         setHashtag(MBTI_INFO[value].infomation[0]);
       }
     },
-    [mbti, setMbti]
+    [mbti, setMbti, setHashtag]
   );
 
   const onClickSetting = useCallback(() => {
-    if (mbti && hashtag && isLoggedin) {
-      setIsSetted(true);
-      setHash(hashtag);
+    if (mbti && hashtag && user?.uid) {
+      setHashtag(hashtag);
       navigator("home");
       signIn();
     }
-  }, [navigator, setIsSetted, isLoggedin, mbti, hashtag, setHash, signIn]);
+  }, [navigator, user, mbti, hashtag, setHashtag, signIn]);
 
   return (
     <Layout>
@@ -73,8 +104,11 @@ const Init: React.FC<InitProps> = ({ navigator }) => {
         <div className="suggest">
           되고 싶은 <span>MBTI</span>를 <br /> 골라 주세요.{" "}
         </div>
+        <div className="image-container">
+          <img alt="photoUrl" className="photoURL" src={user?.photoURL} />
+        </div>
         <InitStyled.Container>
-          {mbti.split("").map((value, index) => (
+          {mbti?.split("").map((value, index) => (
             <div onClick={() => onClickArrow(index)} className="mbti">
               <span>{value}</span>
             </div>

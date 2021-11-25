@@ -32,7 +32,7 @@ const Intro: React.FC<CongratulateProps> = ({ navigator }) => {
             .doc(uid)
             .collection("information")
             .onSnapshot((snapshot) => {
-              const data = snapshot.docs[0].data();
+              const data = snapshot?.docs[0]?.data();
               if (data) {
                 const { mbti, hashtag } = data as UserContextType["user"];
                 setUser({
@@ -41,11 +41,14 @@ const Intro: React.FC<CongratulateProps> = ({ navigator }) => {
                   uid,
                   displayName,
                   photoURL,
-                  isLoggedin: true,
                 });
-                navigator("/home");
+                navigator("/init");
               } else {
-                setUser({ photoURL, displayName, uid, isLoggedin: true });
+                setUser({
+                  photoURL,
+                  displayName,
+                  uid,
+                });
                 navigator("/init");
               }
             });
