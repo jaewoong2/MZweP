@@ -35,7 +35,7 @@ function App() {
       <Routes>
         <Route path="/init" element={<Init navigator={appNavigator} />} />
         <Route path="/" element={<Intro navigator={appNavigator} />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<Home navigator={appNavigator} />} />
         <Route path="/setting" element={<Init navigator={appNavigator} />} />
         <Route path="/mission" element={<Init navigator={appNavigator} />} />
       </Routes>

@@ -49,8 +49,7 @@ const Init: React.FC<InitProps> = ({ navigator }) => {
             });
           }
         });
-    } else {
-      navigator("/");
+      navigator("/home");
     }
   }, [navigator, setUser, auth]);
 

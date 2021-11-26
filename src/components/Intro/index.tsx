@@ -8,6 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Container, Headers, Login } from "./Intro.styles";
 import { UserContext } from "../../context/Context";
 import { UserContextType } from "../../assets/types";
+import { User } from "firebase/auth";
 interface CongratulateProps {
   navigator: (url: string) => void;
 }
@@ -15,11 +16,44 @@ const Intro: React.FC<CongratulateProps> = ({ navigator }) => {
   const { setUser } = useContext(UserContext);
   const [hidden, setHidden] = useState(true);
 
+  const checkLogin = useCallback(() => {
+    if (auth.currentUser) {
+      const { uid, photoURL, displayName } = auth?.currentUser as User;
+      db.collection(`users`)
+        .doc(uid)
+        .collection("information")
+        .onSnapshot((snapshot) => {
+          const data = snapshot?.docs[0]?.data();
+          if (data) {
+            const { mbti, hashtag } = data as UserContextType["user"];
+            setUser({
+              mbti,
+              hashtag,
+              uid,
+              displayName,
+              photoURL,
+            });
+            navigator("/home");
+          } else {
+            setUser({
+              photoURL,
+              displayName,
+              uid,
+            });
+            navigator("/init");
+          }
+        });
+    } else {
+      navigator("/");
+    }
+  }, [navigator, setUser]);
+
   useEffect(() => {
     setTimeout(() => {
       setHidden(false);
+      checkLogin();
     }, 2000);
-  }, [navigator]);
+  }, [navigator, checkLogin]);
 
   const singInWithGoogle = useCallback(() => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -42,7 +76,7 @@ const Intro: React.FC<CongratulateProps> = ({ navigator }) => {
                   displayName,
                   photoURL,
                 });
-                navigator("/init");
+                navigator("/home");
               } else {
                 setUser({
                   photoURL,
