@@ -9,11 +9,13 @@ const Layout: React.FC = ({ children }) => {
   return (
     <Styled.Main>
       <Styled.Header>
-        <div className="spans">
-          Wanna <span className="B">B</span>
-          <span className="T">t</span>
-          <span className="I">i</span>
-        </div>
+        <Link className="link" to={"/"}>
+          <div className="spans">
+            Wanna <span className="B">B</span>
+            <span className="T">t</span>
+            <span className="I">i</span>
+          </div>
+        </Link>
         <RiMenu3Fill className="icon" />
       </Styled.Header>
       <Styled.Container>{children}</Styled.Container>

@@ -18,6 +18,19 @@ const Main = styled.div`
     /* font-family: "Dancing Script", cursive; */
   }
 
+  .link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
   @media screen and (max-width: 400px) {
     width: 100%;
     height: 100%;
@@ -97,6 +110,7 @@ const Lists = styled.ul`
   margin: 0;
   display: flex;
   width: 100%;
+  background-color: white;
 
   box-shadow: 0px 1px 4px #525252ce;
   /* border-radius: 7px; */
@@ -133,20 +147,6 @@ const Lists = styled.ul`
       }
     }
     transition: all 0.25s;
-  }
-
-  .link {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: inherit;
-    text-decoration: none;
-
-    &:hover {
-      color: inherit;
-      text-decoration: none;
-    }
   }
 `;
 
