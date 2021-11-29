@@ -10,6 +10,8 @@ type userType = {
     displayName?: string;
     uid?: string;
     photoURL?: string;
+    point?: number;
+    finished: number[];
     mbti: MBTI_NAME;
     hashtag: string;
     currentPage: "HOME" | "MISSION" | "SETTING";

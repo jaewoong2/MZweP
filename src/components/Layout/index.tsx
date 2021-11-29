@@ -34,7 +34,7 @@ const Layout: React.FC = ({ children }) => {
             </Link>
           </li>
           <li>
-            <Link className="link" to={"/setting"}>
+            <Link className="link" to={"/init"}>
               <AiFillSetting className="icon"></AiFillSetting>
               <span>설정</span>
             </Link>

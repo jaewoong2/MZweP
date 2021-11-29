@@ -14,6 +14,8 @@ const initialUserState: UserContextType = {
     uid: "",
     photoURL: "",
     hashtag: "",
+    finished: [],
+    point: 0,
     mbti: "ESTP",
     currentPage: "HOME",
     setHashtag: (value: string) => {},

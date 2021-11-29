@@ -22,36 +22,37 @@ interface InitProps {
 
 const Init: React.FC<InitProps> = ({ navigator }) => {
   const { user, setUser } = useContext(UserContext);
+  const [isinit, setIsinit] = useState(true);
   const { mbti, setMbti, hashtag, setHashtag } = user;
 
-  useEffect(() => {
-    if (auth.currentUser) {
-      const { uid, photoURL, displayName } = auth?.currentUser as User;
-      db.collection(`users`)
-        .doc(uid)
-        .collection("information")
-        .onSnapshot((snapshot) => {
-          const data = snapshot?.docs[0]?.data();
-          if (data) {
-            const { mbti, hashtag } = data as UserContextType["user"];
-            setUser({
-              mbti,
-              hashtag,
-              uid,
-              displayName,
-              photoURL,
-            });
-          } else {
-            setUser({
-              photoURL,
-              displayName,
-              uid,
-            });
-          }
-        });
-      navigator("/home");
-    }
-  }, [navigator, setUser, auth]);
+  // useEffect(() => {
+  //   if (auth.currentUser) {
+  //     const { uid, photoURL, displayName } = auth?.currentUser as User;
+  //     db.collection(`users`)
+  //       .doc(uid)
+  //       .collection("information")
+  //       .onSnapshot((snapshot) => {
+  //         const data = snapshot?.docs[0]?.data();
+  //         if (data) {
+  //           const { mbti, hashtag } = data as UserContextType["user"];
+  //           setUser({
+  //             mbti,
+  //             hashtag,
+  //             uid,
+  //             displayName,
+  //             photoURL,
+  //           });
+  //         } else {
+  //           setUser({
+  //             photoURL,
+  //             displayName,
+  //             uid,
+  //           });
+  //         }
+  //       });
+  //     navigator("/home");
+  //   }
+  // }, [navigator, setUser, auth]);
 
   const onClickHashTag = useCallback(
     (value: string) => {
@@ -62,13 +63,35 @@ const Init: React.FC<InitProps> = ({ navigator }) => {
 
   const signIn = useCallback(async () => {
     const { uid } = auth?.currentUser as User;
+    db.collection("users")
+      .doc(uid)
+      .collection("information")
+      .onSnapshot((doc) => {
+        const data = doc.docs[0].data();
+        if (data) {
+          setIsinit(false);
+          doc.docs[0].ref.update({
+            uid,
+            point: 0,
+            finished: [],
+            mbti,
+            hashtag,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        }
+      });
 
-    await db.collection(`users`).doc(uid).collection("information").add({
-      mbti,
-      hashtag,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-  }, [mbti, hashtag]);
+    if (isinit) {
+      await db.collection(`users`).doc(uid).collection("information").add({
+        uid,
+        point: 0,
+        finished: [],
+        mbti,
+        hashtag,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+  }, [mbti, hashtag, isinit]);
 
   const onClickArrow = useCallback(
     (index: number) => {

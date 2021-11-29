@@ -13,6 +13,10 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 
+  .bolder {
+    font-weight: bolder;
+  }
+
   * {
     -ms-user-select: none;
     -moz-user-select: -moz-none;
