@@ -48,6 +48,13 @@ const Header = styled.header`
   padding: 0 20px 0 20px;
   box-shadow: 0px -1px 4px #525252ce;
   /* border-radius: 7px; */
+  .logout {
+    font-size: 14px;
+    font-style: italic;
+    font-family: "Noto Sans Kr";
+    font-weight: 600;
+    cursor: pointer;
+  }
 
   .icon {
     cursor: pointer;

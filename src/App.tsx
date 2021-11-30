@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import Init from "./components/Init";
 import Intro from "./components/Intro";
 import Home from "./components/Home";
+import Mission from "./components/Mission";
 
 const Main = styled.main`
   width: 100%;
@@ -24,7 +25,6 @@ const Main = styled.main`
 
 function App() {
   const navigator = useNavigate();
-
   const appNavigator = useCallback(
     (url: string) => navigator(url),
     [navigator]
@@ -37,7 +37,7 @@ function App() {
         <Route path="/" element={<Intro navigator={appNavigator} />} />
         <Route path="/home" element={<Home navigator={appNavigator} />} />
         <Route path="/setting" element={<Init navigator={appNavigator} />} />
-        <Route path="/mission" element={<Init navigator={appNavigator} />} />
+        <Route path="/mission" element={<Mission navigator={appNavigator} />} />
       </Routes>
     </Main>
   );

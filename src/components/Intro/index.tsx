@@ -9,6 +9,7 @@ import { Container, Headers, Login } from "./Intro.styles";
 import { UserContext } from "../../context/Context";
 import { UserContextType } from "../../assets/types";
 import { User } from "firebase/auth";
+import { FaGoogle } from "react-icons/fa";
 interface CongratulateProps {
   navigator: (url: string) => void;
 }
@@ -57,42 +58,34 @@ const Intro: React.FC<CongratulateProps> = ({ navigator }) => {
 
   const singInWithGoogle = useCallback(() => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth
-      .signInWithPopup(provider)
-      .then(async (result) => {
-        if (result.user) {
-          const { uid, displayName, photoURL } = result.user;
-          db.collection(`users`)
-            .doc(uid)
-            .collection("information")
-            .onSnapshot((snapshot) => {
-              const data = snapshot?.docs[0]?.data();
-              if (data) {
-                const { mbti, hashtag } = data as UserContextType["user"];
-                setUser({
-                  mbti,
-                  hashtag,
-                  uid,
-                  displayName,
-                  photoURL,
-                });
-                navigator("/home");
-              } else {
-                setUser({
-                  photoURL,
-                  displayName,
-                  uid,
-                });
-                navigator("/init");
-              }
-            });
+    auth.signInWithPopup(provider).then(async (result) => {
+      if (result.user) {
+        const { uid, displayName, photoURL } = result.user;
+        const data = (await db.collection(`users`).doc(uid).get()).data();
+        if (data) {
+          const { mbti, hashtag } = data as UserContextType["user"];
+          setUser({
+            mbti,
+            hashtag,
+            uid,
+            displayName,
+            photoURL,
+          });
+          navigator("/home");
+        } else {
+          setUser({
+            photoURL,
+            displayName,
+            uid,
+          });
+          navigator("/init");
         }
-      })
-      .catch((err) => console.log(err.code));
+      }
+    });
   }, [navigator, setUser]);
 
   return (
-    <Layout>
+    <Layout navigator={navigator}>
       <Container>
         <Headers className={hidden ? "hidden" : ""}>
           <div className="spans">
@@ -103,8 +96,7 @@ const Intro: React.FC<CongratulateProps> = ({ navigator }) => {
           새로운 나를 만나다
         </Headers>
         <Login onClick={singInWithGoogle} className={hidden ? "hidden" : ""}>
-          <FcGoogle className="icon" />
-          구글 로그인
+          <FaGoogle className="icon" />
         </Login>
       </Container>
     </Layout>

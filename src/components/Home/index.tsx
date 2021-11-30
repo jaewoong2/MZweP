@@ -1,16 +1,13 @@
-import { User } from "firebase/auth";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import { BsCheck2Circle, BsCircle } from "react-icons/bs";
 import { FaDice } from "react-icons/fa";
-
 import { HiOutlineGift } from "react-icons/hi";
 import styled from "styled-components";
 import { Quests } from "../../assets/constant";
-import { UserContextType } from "../../assets/types";
 import { UserContext } from "../../context/Context";
-import { auth, db } from "../../setting/firebase";
 import Layout from "../Layout";
+import { auth, db } from "../../setting/firebase";
+import firebase from "firebase/compat/app";
+import { User } from "firebase/auth";
 
 const Container = styled.div<{ nowIndex: number }>`
   overflow: auto;
@@ -349,15 +346,15 @@ const BarContainer = styled.div<{ persentage: number }>`
   width: 100%;
   height: 40px;
   background-color: #fff;
-  border-radius: 30px;
+  border-radius: 4px;
   box-shadow: 1px 1px 7px #1f1f1fac;
   margin-top: 5px;
 
   .bar {
     width: ${(props) => props.persentage + "%"};
     height: 40px;
-    border-radius: 30px;
-    /* box-shadow: 1px 1px 2px #3a3a3aee; */
+    border-radius: 0px 5px 5px 0px;
+    box-shadow: 1px 1px 2px #3a3a3aee;
     position: relative;
 
     /* background-color: ${({ theme }) => theme.color.skyBlue}; */
@@ -370,7 +367,7 @@ const BarContainer = styled.div<{ persentage: number }>`
       display: flex;
       align-items: center;
       color: black;
-
+      margin-left: 0px;
       font-weight: 600;
       font-size: 13px;
     }
@@ -381,83 +378,123 @@ interface HomeProps {
   navigator: (url: string) => void;
 }
 
-const today = new Date().getMonth() + 1 + "/" + new Date().getDate();
-
 const Home: React.FC<HomeProps> = ({ navigator }) => {
   const { user, setUser } = useContext(UserContext);
   const [quests, setQuests] = useState<number[]>([]);
   const [nowIndex, setNowIndex] = useState(0);
 
-  const onClickDice = useCallback(() => {
-    setQuests(() => {
-      const nextQuests: number[] = [];
-      while (nextQuests.length < 3) {
-        const randomIndex = Math.floor(Math.random() * 10);
-        if (
-          !nextQuests.includes(randomIndex) &&
-          !user?.finished?.includes(randomIndex)
-        ) {
-          nextQuests.push(randomIndex);
+  const onClickDice = useCallback(async () => {
+    if (user.finished.length > 6) {
+      const setData = async () => {
+        const { uid } = auth?.currentUser as User;
+        const dataRef = db.collection(`users`).doc(uid);
+        const data = (await db.collection(`users`).doc(uid).get()).data();
+        dataRef.set({
+          ...data,
+          finished: [],
+        });
+        setQuests([]);
+      };
+      setData();
+    } else {
+      setQuests(() => {
+        const nextQuests: number[] = [];
+        while (nextQuests.length < 3) {
+          const randomIndex = Math.floor(Math.random() * 10);
+          if (
+            !nextQuests.includes(randomIndex) &&
+            !user?.finished?.includes(randomIndex)
+          ) {
+            nextQuests.push(randomIndex);
+          }
         }
-      }
-      return nextQuests;
-    });
+        return nextQuests;
+      });
+    }
   }, [user.finished]);
 
-  const checkLogin = useCallback(() => {
-    if (auth.currentUser) {
-      const { uid, photoURL, displayName } = auth?.currentUser as User;
-      db.collection(`users`)
-        .doc(uid)
-        .collection("information")
-        .onSnapshot((snapshot) => {
-          const data = snapshot?.docs[0]?.data();
-          if (data) {
-            const { mbti, hashtag } = data as UserContextType["user"];
-            setUser({
-              mbti,
-              hashtag,
-              uid,
-              displayName,
-              photoURL,
-            });
-          } else {
-            setUser({
-              photoURL,
-              displayName,
-              uid,
-            });
-          }
+  const checkLogin = useCallback(async () => {
+    if (auth?.currentUser) {
+      const { uid, displayName, photoURL } = auth?.currentUser as User;
+      const data = (await db.collection(`users`).doc(uid).get()).data();
+      if (data) {
+        const { finished, mbti, hashtag, point } = data;
+        setUser({
+          mbti,
+          hashtag,
+          finished,
+          point,
+          uid,
+          displayName,
+          photoURL,
         });
-    } else {
-      navigator("/home");
+      }
     }
-  }, [setUser, navigator]);
+  }, [setUser]);
+  //   const { uid, photoURL, displayName } = auth?.currentUser as User;
+  //   db.collection(`users`)
+  //     .doc(uid)
+  //     .collection("information")
+  //     .onSnapshot((snapshot) => {
+  //       const data = snapshot?.docs[0]?.data();
+  //       if (data) {
+  //         const { mbti, hashtag } = data as UserContextType["user"];
+  //         setUser({
+  //           mbti,
+  //           hashtag,
+  //           uid,
+  //           displayName,
+  //           photoURL,
+  //         });
+  //       } else {
+  //         setUser({
+  //           photoURL,
+  //           displayName,
+  //           uid,
+  //         });
+  //       }
+  //     });
+  // } else {
+  //   navigator("/");
+  // }
+  // }, [setUser, navigator]);
 
   const onClickMission = useCallback(
-    (index) => {
-      db.collection(`users`)
-        .doc(user?.uid)
-        .collection("information")
-        .onSnapshot((snapshot) => {
-          snapshot?.docs[0]?.ref.update({
-            finished: [...user?.finished, index],
-          });
+    async (index) => {
+      const { uid } = auth?.currentUser as User;
+      const dataRef = db.collection(`users`).doc(uid);
+      const data = (await db.collection(`users`).doc(uid).get()).data();
+      if (data) {
+        dataRef.set({
+          ...data,
+          point: data.point + 10,
+          finished: [...user.finished, index],
         });
-    },
-    [user]
-  );
 
-  useEffect(() => {
-    quests.length === 0 && onClickDice();
-  }, [onClickDice, quests]);
+        setUser({
+          point: data.point + 10,
+          finished: [...user.finished, index],
+        });
+      }
+      console.log(user.finished);
+    },
+    [user, setUser]
+  );
 
   useEffect(() => {
     checkLogin();
   }, [checkLogin]);
 
+  if (!user?.uid) {
+    navigator("/");
+  }
+
+  useEffect(() => {
+    quests.length === 0 && onClickDice();
+  }, [onClickDice, quests]);
+
   return (
-    <Layout>
+    <Layout navigator={navigator}>
       <Container nowIndex={nowIndex}>
         <div className="wrapper">
           <div className="user-info">
@@ -469,16 +506,16 @@ const Home: React.FC<HomeProps> = ({ navigator }) => {
           <span className="progress-info">미션진행도</span>
           <BarContainer
             persentage={
-              Math.ceil(10 / user?.finished?.length) > 100
+              Math.ceil((user?.finished?.length / 10) * 100) > 100
                 ? 0
-                : Math.ceil(10 / user?.finished?.length)
+                : Math.ceil((user?.finished?.length / 10) * 100)
             }
           >
             <div className="bar">
               <span>
-                {Math.ceil(10 / user?.finished?.length) > 100
+                {Math.ceil((user?.finished?.length / 10) * 100) > 100
                   ? 0
-                  : Math.ceil(10 / user?.finished?.length)}
+                  : Math.ceil((user?.finished?.length / 10) * 100)}
                 %
               </span>
             </div>
@@ -497,7 +534,7 @@ const Home: React.FC<HomeProps> = ({ navigator }) => {
               (text, index) =>
                 quests.includes(index) && (
                   <div
-                    onClick={onClickMission}
+                    onClick={() => onClickMission(index)}
                     className={`mission ${
                       user.finished.includes(index) ? "finished" : ""
                     }`}

@@ -29,7 +29,7 @@ export const Container = styled.div`
 `;
 
 export const Headers = styled.header`
-  display: ${(props) => (props.className !== "hidden" ? "none" : "flex")};
+  /* display: ${(props) => (props.className !== "hidden" ? "none" : "flex")}; */
   flex-direction: column;
   align-items: center;
   font-style: normal;
@@ -68,22 +68,23 @@ export const Headers = styled.header`
 `;
 
 export const Login = styled.div`
-  width: 100%;
-  height: 50px;
+  margin-top: 30px;
+  width: 70px;
+  height: 70px;
   display: ${(props) => (props.className === "hidden" ? "none" : "flex")};
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border-radius: 8px;
-  border: 2px solid black;
+  border-radius: 20px;
   font-family: "Noto Sans KR", sans-serif;
   font-weight: 600;
+  border: 1px solid #d9d9d9d9;
   font-style: normal;
   color: #272727;
   text-shadow: none;
+  /* background-color: #8c76c9d3; */
   font-size: 20px;
   .icon {
-    font-size: 36px;
-    margin-right: 15px;
+    font-size: 30px;
   }
 `;

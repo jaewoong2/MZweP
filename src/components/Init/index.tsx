@@ -63,26 +63,34 @@ const Init: React.FC<InitProps> = ({ navigator }) => {
 
   const signIn = useCallback(async () => {
     const { uid } = auth?.currentUser as User;
-    db.collection("users")
-      .doc(uid)
-      .collection("information")
-      .onSnapshot((doc) => {
-        const data = doc.docs[0].data();
-        if (data) {
-          setIsinit(false);
-          doc.docs[0].ref.update({
-            uid,
-            point: 0,
-            finished: [],
-            mbti,
-            hashtag,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        }
+    const dataRef = (await db.collection(`users`).doc(uid).get()).ref;
+    const data = (await db.collection(`users`).doc(uid).get()).data();
+    if (data) {
+      setIsinit(false);
+      dataRef.set({
+        ...data,
+        mbti,
+        hashtag,
+        finished: [],
       });
+    }
+    //       .onSnapshot((doc) => {
+    //   const data = doc.docs[0].data();
+    //   if (data) {
+    //     setIsinit(false);
+    //     doc.docs[0].ref.update({
+    //       uid,
+    //       point: 0,
+    //       finished: [],
+    //       mbti,
+    //       hashtag,
+    //       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    //     });
+    //   }
+    // });
 
     if (isinit) {
-      await db.collection(`users`).doc(uid).collection("information").add({
+      await db.collection(`users`).doc(uid).set({
         uid,
         point: 0,
         finished: [],
@@ -121,7 +129,7 @@ const Init: React.FC<InitProps> = ({ navigator }) => {
   }, [navigator, user, mbti, hashtag, setHashtag, signIn]);
 
   return (
-    <Layout>
+    <Layout navigator={navigator}>
       <InitStyled.Wrapper>
         <div className="suggest">
           되고 싶은 <span>MBTI</span>를 <br /> 골라 주세요.{" "}

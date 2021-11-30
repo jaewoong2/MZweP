@@ -4,8 +4,11 @@ import { GrHomeOption } from "react-icons/gr";
 import { RiMenu3Fill } from "react-icons/ri";
 import { AiOutlineStar, AiFillSetting } from "react-icons/ai";
 import { Link } from "react-router-dom";
-
-const Layout: React.FC = ({ children }) => {
+import { auth } from "../../setting/firebase";
+interface LayoutProps {
+  navigator: (url: string) => void;
+}
+const Layout: React.FC<LayoutProps> = ({ children, navigator }) => {
   return (
     <Styled.Main>
       <Styled.Header>
@@ -16,7 +19,15 @@ const Layout: React.FC = ({ children }) => {
             <span className="I">i</span>
           </div>
         </Link>
-        <RiMenu3Fill className="icon" />
+        <span
+          onClick={() => {
+            auth.signOut();
+            navigator("/");
+          }}
+          className="logout"
+        >
+          Logout
+        </span>
       </Styled.Header>
       <Styled.Container>{children}</Styled.Container>
       <Styled.Nav>

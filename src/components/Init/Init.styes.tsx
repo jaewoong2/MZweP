@@ -78,9 +78,9 @@ export const Wrapper = styled.div`
     font-family: "Noto Sans KR", sans-serif;
     font-weight: bolder;
     font-size: 36px;
-    margin-left: 5px;
+    margin-left: 20px;
     margin-top: 10px;
-    margin-bottom: 40px;
+    margin-bottom: 5px;
 
     span {
       color: ${(props) => props.theme.color.main};
@@ -149,7 +149,7 @@ export const Container = styled.div`
   justify-content: center;
   font-family: "Shippori Antique", sans-serif;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 5px;
 
   .mbti {
     border-radius: 50%;
@@ -163,7 +163,6 @@ export const Container = styled.div`
     font-weight: bolder;
     align-items: center;
     font-size: 65px;
-
     color: ${(props) => props.theme.color.main};
     text-shadow: 1px 1px 7px #3a3a3a6c;
     position: relative;
